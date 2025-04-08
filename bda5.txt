@@ -1,0 +1,31 @@
+$sudo dnf install -y mongodb mongodb-server 
+$sudo systemctl start mongod 
+$sudo systemctl enable mongod 
+$sudo systemctl status mongod 
+$sudo dnf install mongodb-mongosh 
+$mangosh 
+$use testDB 
+
+[ 
+{ "_id": 1, "name": "Alice", "age": 22, "marks": 85 }, 
+{ "_id": 2, "name": "Bob", "age": 21, "marks": 78 }, 
+{ "_id": 3, "name": "Charlie", "age": 23, "marks": 92 }, 
+{ "_id": 4, "name": "David", "age": 20, "marks": 88 }, 
+{ "_id": 5, "name": "Eve", "age": 22, "marks": 76 } 
+] 
+
+
+db.createCollection('Students'); 
+db.student.insertOne({ "_id": 1, "name": "Alice", "age": 22, "marks": 85 }) 
+
+(i) Count 
+$ db.student.count({ age: { $gt: 20 } }) 
+
+ii) Sort 
+$ db.students.find().sort({ marks: -1 }) 
+
+$db.students.find().sort({ marks: -1 }).limit(3)
+
+$db.students.find().sort({ marks: -1 }).skip(2)
+
+db.students.aggregate([ { $group: { _id: "$age", avgMarks: { $avg: "$marks" } } } ])
