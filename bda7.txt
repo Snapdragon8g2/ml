@@ -1,0 +1,79 @@
+#Program 07 Use Hive
+
+Create a Database: 
+CREATE DATABASE employee_db; 
+USE employee_db;
+
+Alter a Database: 
+ALTER DATABASE employee_db SET DBPROPERTIES ('Owner'='Admin');
+
+Drop a Data Base 
+DROP DATABASE employee_db CASCADE;
+
+Create a Table 
+CREATE TABLE employees ( 
+emp_id INT, 
+name STRING, 
+age INT, 
+dept_id INT, 
+salary FLOAT 
+)
+ROW FORMAT DELIMITED  
+FIELDS TERMINATED BY ','  
+STORED AS TEXTFILE;
+
+LOAD DATA INPATH /user/cloudera/employees.txt INTO TABLE employees;
+Alter a Table 
+Add a New Column 
+ALTER TABLE employees ADD COLUMNS (email STRING);
+
+Rename: 
+ALTER TABLE employees RENAME TO employees_new; 
+
+Drop Table: 
+DROP TABLE employees_new; 
+
+Create a View 
+CREATE VIEW high_salary_employees AS  
+SELECT emp_id, name, salary  
+FROM employees  
+WHERE salary > 50000; 
+
+Alter a View: 
+ALTER VIEW high_salary_employees AS  
+SELECT emp_id, name, age, salary  
+FROM employees  
+WHERE salary > 60000; 
+
+Drop View: 
+DROP VIEW high_salary_employees; 
+
+Create a Function 
+Add a JAR file containing a Java-based UDF: 
+ADD JAR /user/cloudera/custom_udf.jar; 
+CREATE FUNCTION to_upper AS 'com.example.hiveudf.ToUpperUDF'; 
+
+Use the Function 
+SELECT to_upper(name) FROM employees; 
+
+Drop Function 
+DROP FUNCTION to_upper;
+
+Create an Index 
+CREATE INDEX emp_dept_idx  
+ON TABLE employees (dept_id) 
+AS 'org.apache.hadoop.hive.ql.index.compact.CompactIndexHandler' 
+WITH DEFERRED REBUILD;
+
+Rebuild the Index: 
+ALTER INDEX emp_dept_idx ON employees REBUILD; 
+
+Drop Index 
+DROP INDEX emp_dept_idx ON employees;
+
+Check all tables in the current database: 
+SHOW TABLES;
+DESCRIBE employees;
+
+Display the table data 
+SELECT * FROM employees LIMIT 5;
