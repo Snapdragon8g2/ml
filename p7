@@ -1,0 +1,26 @@
+sudo apt update
+sudo apt upgrade -y
+sudo apt install ansible -y
+ansible -v
+gedit hosts.ini
+
+[local]
+localhost ansible_connection=local
+
+  
+  gedit setup.yml
+---
+- name: Basic Server Setup
+  hosts: local
+  become: yes # Use privilege escalation (sudo)
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install curl
+      apt:
+        name: curl
+        state: present
+
+sudo ansible-playbook -i hosts.ini setup.yml
